@@ -1,0 +1,29 @@
+---
+
+
+- name: install prereq. pkgs
+  ansible.builtin.apt:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+      - apt-transport-https 
+      - ca-certificates 
+      - gnupg
+
+- name: Install apt repo
+  ansible.builtin.apt_repository:
+    repo: "deb https://packages.cloud.google.com/apt cloud-sdk main"
+    filename: "google-cloud-sdk"
+    state: present
+
+- name: Install apt key
+  ansible.builtin.apt_key:
+    url: "https://packages.cloud.google.com/apt/doc/apt-key.gpg"
+    state: present
+
+- name: Install package
+  ansible.builtin.apt:
+    name: "google-cloud-cli"
+    update_cache: yes
+    state: present
